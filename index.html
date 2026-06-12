@@ -2,20 +2,21 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>即時影像整合頁</title>
+    <title>即時影像</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
         }
 
         .container {
             display: flex;
-            flex-direction: column; /* 將排列方向改為垂直（上下） */
-            align-items: center;    /* 讓內部的攝影機區塊水平置中 */
+            flex-direction: column;
+            align-items: center;
             gap: 20px;
-            margin-top: 20px;
         }
 
         .cam-box {
@@ -30,6 +31,7 @@
             height: 320px;
             border: none;
             border-radius: 10px;
+            display: block; /* 讓影像作為區塊顯示，避免多餘空白 */
         }
 
         button {
@@ -41,6 +43,7 @@
             background-color: #0078D7;
             color: white;
             cursor: pointer;
+            width: 100%; /* 讓按鈕寬度自動對齊影像寬度，視覺更整齊 */
         }
 
         button:hover {
@@ -50,19 +53,15 @@
 </head>
 <body>
 
-    <h2>即時影像整合</h2>
-
     <div class="container">
         
         <div class="cam-box">
             <iframe id="cam1" src="https://www.twipcam.com/cam/nwt-000020"></iframe>
-            <br>
             <button onclick="reloadCam('cam1')">撥放</button>
         </div>
 
         <div class="cam-box">
             <iframe id="cam2" src="https://www.twipcam.com/cam/tao-000150"></iframe>
-            <br>
             <button onclick="reloadCam('cam2')">撥放</button>
         </div>
 
