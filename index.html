@@ -277,7 +277,8 @@
                     <div class="weather-stats">
                         <p><strong>氣溫：</strong> <span id="ntpc-temp">-- °C</span></p>
                         <p><strong>濕度：</strong> <span id="ntpc-hum">-- %</span></p>
-                        <p><strong>狀態分析：</strong> <span class="warning-badge" id="ntpc-warning">載入中...</span></p>
+                        <p><strong>雨量：</strong> <span id="ntpc-rain">-- mm</span></p>
+                        <p><strong>狀態：</strong> <span class="warning-badge" id="ntpc-warning">載入中...</span></p>
                     </div>
                 </div>
                 
@@ -319,7 +320,8 @@
                     <div class="weather-stats">
                         <p><strong>氣溫：</strong> <span id="tycg-temp">-- °C</span></p>
                         <p><strong>濕度：</strong> <span id="tycg-hum">-- %</span></p>
-                        <p><strong>狀態分析：</strong> <span class="warning-badge" id="tycg-warning">載入中...</span></p>
+                        <p><strong>雨量：</strong> <span id="tycg-rain">-- mm</span></p>
+                        <p><strong>狀態：</strong> <span class="warning-badge" id="tycg-warning">載入中...</span></p>
                     </div>
                 </div>
                 
@@ -544,17 +546,53 @@
         function updateWeatherUI(prefix, station, distance, warningInfo) {
             let temp = station.WeatherElement.AirTemperature;
             let hum = station.WeatherElement.RelativeHumidity;
+            
+            // 抓取測站的降雨量資料 (處理氣象署 API 可能的不同格式，通常在 Now.Precipitation)
+            let rain = 0;
+            if (station.WeatherElement.Now && station.WeatherElement.Now.Precipitation !== undefined) {
+                rain = station.WeatherElement.Now.Precipitation;
+            } else if (station.WeatherElement.Precipitation !== undefined) {
+                rain = station.WeatherElement.Precipitation;
+            }
 
-            temp = (temp === -99 || temp === -999) ? "--" : temp;
-            hum = (hum === -99 || hum === -999) ? "--" : hum;
+            temp = (temp === -99 || temp === -999 || temp === "-99.0") ? "--" : temp;
+            hum = (hum === -99 || hum === -999 || hum === "-99.0") ? "--" : hum;
+            // -99 通常代表無雨或儀器微量未計
+            rain = (rain === -99 || rain === -999 || rain < 0 || rain === "-99.0") ? 0 : rain;
 
             document.getElementById(`${prefix}-station`).innerText = `(測站：${station.StationName}，距離約 ${distance.toFixed(1)} km)`;
             document.getElementById(`${prefix}-temp`).innerText = `${temp} °C`;
             document.getElementById(`${prefix}-hum`).innerText = `${hum} %`;
             
+            const rainElement = document.getElementById(`${prefix}-rain`);
+            if (rainElement) rainElement.innerText = `${rain} mm/hr`;
+            
+            // --- 綜合判斷邏輯：結合氣象特報與「實際測站雨量」 ---
+            let finalMessage = warningInfo.message;
+            let finalCssClass = warningInfo.cssClass;
+
+            if (warningInfo.message.includes('⚠️')) {
+                // 如果有警報，但該地點實際沒下雨
+                if (rain === 0) {
+                    finalMessage = `${warningInfo.message} (目前測站無雨)`;
+                    finalCssClass = 'badge-alert'; // 降級為橘色
+                } else {
+                    finalMessage = `${warningInfo.message} (測站降雨中: ${rain}mm)`;
+                    finalCssClass = 'badge-danger'; // 紅色警戒
+                }
+            } else {
+                // 如果無警報，但該地點其實有下雨
+                if (rain > 0) {
+                    finalMessage = `🌧️ 測站降雨中 (${rain}mm)`;
+                    finalCssClass = 'badge-alert';
+                } else {
+                    finalMessage = `✅ 天氣穩定 (目前無雨)`;
+                }
+            }
+
             const badgeElement = document.getElementById(`${prefix}-warning`);
-            badgeElement.innerText = warningInfo.message;
-            badgeElement.className = `warning-badge ${warningInfo.cssClass}`;
+            badgeElement.innerText = finalMessage;
+            badgeElement.className = `warning-badge ${finalCssClass}`;
         }
     </script>
 </body>
