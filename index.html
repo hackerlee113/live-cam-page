@@ -12,16 +12,64 @@
            ========================================= */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f0f2f5;
             margin: 0;
-            padding: 15px; /* 手機版稍微減少外距 */
+            padding: 15px;
             color: #333;
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
-            font-size: 1.4em; /* 微調標題大小 */
-            margin-bottom: 20px;
+            color: #1a202c;
+            font-size: 1.8em; 
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /* =========================================
+           頂部控制列
+           ========================================= */
+        .top-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .update-time {
+            font-size: 0.9em;
+            color: #4a5568;
+            background: #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .refresh-btn {
+            background-color: #ffffff;
+            color: #2d3748;
+            border: 1px solid #cbd5e0;
+            padding: 6px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .refresh-btn:hover {
+            background-color: #f7fafc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* =========================================
@@ -31,35 +79,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
         }
 
         .card {
             background: #fff;
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             width: 100%;
             max-width: 800px;
             box-sizing: border-box;
-            text-align: center;
             transition: transform 0.2s ease;
         }
 
         /* =========================================
-           天氣資訊特有樣式 (支援 RWD 雙欄)
+           天氣資訊特有樣式 (RWD 雙欄)
            ========================================= */
         .weather-content-wrapper {
             display: flex;
-            flex-direction: row; /* 預設桌面版為左右排列 */
+            flex-direction: row;
             align-items: stretch;
             justify-content: space-between;
-            gap: 20px;
-            text-align: center;
+            gap: 25px;
         }
 
         .weather-left-col {
-            flex: 1 1 40%;
+            flex: 1 1 45%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,60 +113,123 @@
         }
 
         .weather-right-col {
-            flex: 1 1 55%;
+            flex: 1 1 50%;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* 讓內容上下撐開對齊 */
+            justify-content: space-between;
             gap: 15px;
         }
 
         .weather-left-col h3 {
-            color: #007BFF;
+            color: #2b6cb0;
             margin: 0 0 5px 0;
             font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .station-info {
             font-size: 0.85em;
-            color: #888;
-            font-weight: normal;
+            color: #718096;
             margin-bottom: 20px;
             display: block;
         }
 
-        .weather-stats {
-            display: flex;
-            flex-direction: column;
+        /* -----------------------------------------
+           新增：圖形化天氣儀表板小卡
+           ----------------------------------------- */
+        .weather-widgets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            align-items: center;
-            margin-bottom: 15px; /* 增加底部間距 */
+            width: 100%;
+            margin-bottom: 20px;
         }
 
-        .weather-stats p {
-            margin: 0;
-            font-size: 1.15em;
+        .widget {
+            background: #ffffff;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 12px 8px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .widget:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .widget-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+
+        .widget-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* 獨立顏色設定 */
+        .widget-temp .widget-icon { background: #fff5f5; color: #fc8181; }
+        .widget-hum .widget-icon { background: #ebf8ff; color: #63b3ed; }
+        .widget-rain .widget-icon { background: #f0fff4; color: #48bb78; }
+
+        .widget-value-container {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .widget-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #2d3748;
+            line-height: 1.1;
+        }
+
+        .widget-unit {
+            font-size: 0.7em;
+            color: #a0aec0;
+            font-weight: 600;
+        }
+
+        .widget-label {
+            font-size: 0.8em;
+            color: #718096;
+            margin-top: 4px;
+            font-weight: 500;
         }
 
         /* 警示訊息標籤 (Badge UI) */
         .warning-badge {
             display: inline-block;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 600;
             color: #fff;
-            background-color: #6c757d;
+            background-color: #a0aec0;
             transition: background-color 0.3s ease;
+            width: 90%;
+            text-align: center;
+            box-sizing: border-box;
         }
-        .badge-safe { background-color: #28a745; }   /* 綠色 */
-        .badge-alert { background-color: #fd7e14; }  /* 橘色 */
-        .badge-danger { background-color: #dc3545; } /* 紅色 */
+        .badge-safe { background-color: #48bb78; box-shadow: 0 2px 8px rgba(72,187,120,0.3); } 
+        .badge-alert { background-color: #ed8936; box-shadow: 0 2px 8px rgba(237,137,54,0.3); }
+        .badge-danger { background-color: #e53e3e; box-shadow: 0 2px 8px rgba(229,62,62,0.3); }
 
         /* =========================================
            雷達圖與按鈕設定
@@ -128,31 +237,33 @@
         .radar-container {
             width: 100%;
             height: 280px; 
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #e0e0e0;
-            background-color: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            background-color: #f7fafc;
         }
 
         .msn-btn {
             display: inline-block;
-            background-color: #007BFF;
+            background-color: #3182ce;
             color: #fff;
-            padding: 12px 24px; /* 加大觸控範圍 */
+            padding: 12px 24px;
             border-radius: 25px;
             text-decoration: none;
             font-size: 1em;
-            font-weight: bold;
+            font-weight: 600;
             transition: background-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
-            width: 100%; /* 手機版佔滿寬度 */
+            box-shadow: 0 4px 10px rgba(49,130,206,0.3);
+            width: 100%;
             max-width: 300px;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .msn-btn:hover {
-            background-color: #0056b3;
-            box-shadow: 0 4px 8px rgba(0,123,255,0.4);
+            background-color: #2b6cb0;
+            box-shadow: 0 6px 14px rgba(49,130,206,0.4);
+            transform: translateY(-1px);
         }
 
         /* =========================================
@@ -170,6 +281,7 @@
         .cctv-header h3 {
             margin: 0;
             font-size: 1.2em;
+            color: #2d3748;
         }
 
         .source-switch {
@@ -178,10 +290,10 @@
         }
 
         .switch-btn {
-            background-color: #e9ecef;
-            color: #495057;
-            border: 1px solid #ced4da;
-            padding: 6px 14px;
+            background-color: #edf2f7;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            padding: 6px 16px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.9em;
@@ -190,14 +302,14 @@
         }
 
         .switch-btn:hover {
-            background-color: #e2e6ea;
+            background-color: #e2e8f0;
         }
 
         .switch-btn.active {
-            background-color: #007BFF;
+            background-color: #3182ce;
             color: #fff;
-            border-color: #007BFF;
-            box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+            border-color: #3182ce;
+            box-shadow: 0 2px 6px rgba(49,130,206,0.3);
         }
 
         /* =========================================
@@ -209,8 +321,9 @@
             height: auto;
             aspect-ratio: 16 / 9;
             background: #000;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
         }
 
         video, .radar-container iframe {
@@ -225,7 +338,6 @@
            針對手機窄螢幕的 RWD 全面優化
            ========================================= */
         @media only screen and (max-width: 768px) {
-            /* 天氣卡片改為垂直堆疊 */
             .weather-content-wrapper {
                 flex-direction: column; 
             }
@@ -234,29 +346,37 @@
                 flex: auto;
             }
             .weather-left-col {
-                padding-bottom: 15px;
-                border-bottom: 1px dashed #eee; /* 增加視覺分隔線 */
+                padding-bottom: 20px;
+                border-bottom: 1px dashed #e2e8f0;
                 margin-bottom: 10px;
             }
-            /* 手機版雷達圖高度調整 */
             .radar-container {
                 height: 320px; 
             }
-            /* 讓按鈕在手機上佔滿寬度，方便按壓 */
             .msn-btn {
                 max-width: 100%;
+            }
+            .weather-widgets {
+                gap: 8px; /* 手機版間距稍微縮小 */
             }
         }
     </style>
 </head>
 <body>
+    
+    <h1>即時氣象與交通影像</h1>
+    
+    <div class="top-controls">
+        <span class="update-time" id="last-update-time">最後更新：載入中...</span>
+        <button class="refresh-btn" id="refresh-btn" onclick="refreshData()">🔄 手動更新</button>
+    </div>
+
     <div class="layout-container">
         
-        <!-- 新北 CCTV 卡片 (移到最上方) -->
+        <!-- 新北 CCTV 卡片 -->
         <div class="card cctv-box">
             <div class="cctv-header">
                 <h3>🎥 新北市 CCTV</h3>
-                <!-- 新增來源切換按鈕 (ntpc-btn) -->
                 <div class="source-switch">
                     <button class="switch-btn ntpc-btn" onclick="switchNtpcCCTV(1)">視角 1</button>
                     <button class="switch-btn ntpc-btn" onclick="switchNtpcCCTV(2)">視角 2</button>
@@ -267,22 +387,52 @@
             </div>
         </div>
 
-        <!-- 板橋天氣卡片 (移到 CCTV 下方) -->
+        <!-- 板橋天氣卡片 -->
         <div class="card weather-card">
             <div class="weather-content-wrapper">
-                <!-- 左側：文字資訊 -->
                 <div class="weather-left-col">
                     <h3>📍 板橋即時天氣與雷達</h3>
                     <span class="station-info" id="ntpc-station">尋找最近測站中...</span>
-                    <div class="weather-stats">
-                        <p><strong>氣溫：</strong> <span id="ntpc-temp">-- °C</span></p>
-                        <p><strong>濕度：</strong> <span id="ntpc-hum">-- %</span></p>
-                        <p><strong>雨量：</strong> <span id="ntpc-rain">-- mm</span></p>
-                        <p><strong>狀態：</strong> <span class="warning-badge" id="ntpc-warning">載入中...</span></p>
+                    
+                    <!-- 新版圖形化數據儀表板 -->
+                    <div class="weather-widgets">
+                        <div class="widget widget-temp">
+                            <div class="widget-icon">
+                                <!-- 溫度計 SVG -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="ntpc-temp">--</span>
+                                <span class="widget-unit">°C</span>
+                            </div>
+                            <span class="widget-label">氣溫</span>
+                        </div>
+                        <div class="widget widget-hum">
+                            <div class="widget-icon">
+                                <!-- 水滴 SVG -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="ntpc-hum">--</span>
+                                <span class="widget-unit">%</span>
+                            </div>
+                            <span class="widget-label">濕度</span>
+                        </div>
+                        <div class="widget widget-rain">
+                            <div class="widget-icon">
+                                <!-- 雨雲 SVG -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M16 14v6"></path><path d="M8 14v6"></path><path d="M12 16v6"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="ntpc-rain">--</span>
+                                <span class="widget-unit">mm</span>
+                            </div>
+                            <span class="widget-label">雨量</span>
+                        </div>
                     </div>
+
+                    <span class="warning-badge" id="ntpc-warning">載入中...</span>
                 </div>
-                
-                <!-- 右側：雷達圖與按鈕 -->
                 <div class="weather-right-col">
                     <div class="radar-container">
                         <iframe src="https://embed.windy.com/embed2.html?lat=25.015484&lon=121.473356&zoom=11&level=surface&overlay=radar&product=radar&menu=&message=&marker=true&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1"></iframe>
@@ -294,38 +444,63 @@
             </div>
         </div>
 
-        <!-- 桃園 CCTV 卡片 (移到天氣上方) -->
+        <!-- 桃園 CCTV 卡片 -->
         <div class="card cctv-box">
             <div class="cctv-header">
                 <h3>🎥 桃園市 CCTV</h3>
-                <!-- 新增來源切換按鈕 (tycg-btn) -->
                 <div class="source-switch">
                     <button class="switch-btn tycg-btn" onclick="switchTaoyuanCCTV(1)">視角 1</button>
                     <button class="switch-btn tycg-btn" onclick="switchTaoyuanCCTV(2)">視角 2</button>
                 </div>
             </div>
             <div class="cctv-box-media-frame">
-                <!-- 將原本的 iframe 改為 video 標籤以支援 m3u8 播放 -->
                 <video id="video-tycg" controls autoplay muted playsinline></video>
             </div>
         </div>
 
-        <!-- 桃園天氣卡片 (移到 CCTV 下方) -->
+        <!-- 桃園天氣卡片 -->
         <div class="card weather-card">
             <div class="weather-content-wrapper">
-                <!-- 左側：文字資訊 -->
                 <div class="weather-left-col">
                     <h3>📍 桃園即時天氣與雷達</h3>
                     <span class="station-info" id="tycg-station">尋找最近測站中...</span>
-                    <div class="weather-stats">
-                        <p><strong>氣溫：</strong> <span id="tycg-temp">-- °C</span></p>
-                        <p><strong>濕度：</strong> <span id="tycg-hum">-- %</span></p>
-                        <p><strong>雨量：</strong> <span id="tycg-rain">-- mm</span></p>
-                        <p><strong>狀態：</strong> <span class="warning-badge" id="tycg-warning">載入中...</span></p>
+                    
+                    <!-- 新版圖形化數據儀表板 -->
+                    <div class="weather-widgets">
+                        <div class="widget widget-temp">
+                            <div class="widget-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="tycg-temp">--</span>
+                                <span class="widget-unit">°C</span>
+                            </div>
+                            <span class="widget-label">氣溫</span>
+                        </div>
+                        <div class="widget widget-hum">
+                            <div class="widget-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="tycg-hum">--</span>
+                                <span class="widget-unit">%</span>
+                            </div>
+                            <span class="widget-label">濕度</span>
+                        </div>
+                        <div class="widget widget-rain">
+                            <div class="widget-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M16 14v6"></path><path d="M8 14v6"></path><path d="M12 16v6"></path></svg>
+                            </div>
+                            <div class="widget-value-container">
+                                <span class="widget-value" id="tycg-rain">--</span>
+                                <span class="widget-unit">mm</span>
+                            </div>
+                            <span class="widget-label">雨量</span>
+                        </div>
                     </div>
+
+                    <span class="warning-badge" id="tycg-warning">載入中...</span>
                 </div>
-                
-                <!-- 右側：雷達圖與按鈕 -->
                 <div class="weather-right-col">
                     <div class="radar-container">
                         <iframe src="https://embed.windy.com/embed2.html?lat=25.010377&lon=121.213633&zoom=11&level=surface&overlay=radar&product=radar&menu=&message=&marker=true&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1"></iframe>
@@ -340,41 +515,51 @@
     </div>
 
     <script>
-        // 等待 DOM 載入完成後再執行
-        document.addEventListener('DOMContentLoaded', () => {
-            // 每次載入時，隨機挑選 1 或 2 視角
+        document.addEventListener('DOMContentLoaded', async () => {
             const randomNtpcView = Math.floor(Math.random() * 2) + 1;
             const randomTycgView = Math.floor(Math.random() * 2) + 1;
 
             switchNtpcCCTV(randomNtpcView);
             switchTaoyuanCCTV(randomTycgView);
             
-            fetchWeatherData();
+            await fetchWeatherData();
+            updateTimestamp();
         });
 
-        /* =========================================
-           1. 影像播放與切換邏輯
-           ========================================= */
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-TW', { hour12: false });
+            document.getElementById('last-update-time').innerText = `最後更新：${timeString}`;
+        }
 
-        // 管理 HLS 實例以防止重複載入造成資源浪費
+        async function refreshData() {
+            const btn = document.getElementById('refresh-btn');
+            btn.innerText = '⏳ 更新中...';
+            btn.disabled = true;
+
+            await fetchWeatherData();
+            updateTimestamp();
+            
+            btn.innerText = '🔄 手動更新';
+            btn.disabled = false;
+        }
+
+        /* 影像播放邏輯 */
         const hlsInstances = {};
 
         function loadHlsVideo(videoElementId, sourceUrl) {
             const video = document.getElementById(videoElementId);
             if (!video) return;
 
-            // 若已有建立過 HLS 物件，先銷毀它，防止背景重複下載串流
             if (hlsInstances[videoElementId]) {
                 hlsInstances[videoElementId].destroy();
                 delete hlsInstances[videoElementId];
             }
 
             if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Safari 原生支援
                 video.src = sourceUrl;
                 video.play();
             } else if (Hls.isSupported()) {
-                // 其他瀏覽器使用 hls.js
                 const hls = new Hls();
                 hlsInstances[videoElementId] = hls;
                 hls.loadSource(sourceUrl);
@@ -383,61 +568,42 @@
             }
         }
 
-        // --- 新北 CCTV 切換邏輯 ---
         const ntpcCCTVSources = {
-            1: "https://cctvatis1.ntpc.gov.tw/hls/C000020/live.m3u8", // 預設視角
-            2: "https://cctvatis1.ntpc.gov.tw/hls/C000012/live.m3u8"  // 新增的備用來源
+            1: "https://cctvatis1.ntpc.gov.tw/hls/C000020/live.m3u8",
+            2: "https://cctvatis1.ntpc.gov.tw/hls/C000012/live.m3u8" 
         };
 
         function switchNtpcCCTV(sourceId) {
             if (ntpcCCTVSources[sourceId]) {
                 loadHlsVideo('video1', ntpcCCTVSources[sourceId]);
             }
-
-            // 更新按鈕樣式狀態 (啟用中反藍)
             const buttons = document.querySelectorAll('.ntpc-btn');
             buttons.forEach((btn, index) => {
-                if (index + 1 === sourceId) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', index + 1 === sourceId);
             });
         }
 
-        // --- 桃園 CCTV 切換邏輯 ---
         const taoyuanCCTVSources = {
-            1: "https://cctvtraffic.tycg.gov.tw/hls/nvr3/camera150/live.m3u8", // 更新為 HLS 來源
-            2: "https://cctvtraffic.tycg.gov.tw/hls/nvr5/camera278/live.m3u8"  // 更新為 HLS 來源
+            1: "https://cctvtraffic.tycg.gov.tw/hls/nvr3/camera150/live.m3u8",
+            2: "https://cctvtraffic.tycg.gov.tw/hls/nvr5/camera278/live.m3u8" 
         };
 
         function switchTaoyuanCCTV(sourceId) {
-            // 使用共用的 loadHlsVideo 來載入 m3u8 串流
             if (taoyuanCCTVSources[sourceId]) {
                 loadHlsVideo('video-tycg', taoyuanCCTVSources[sourceId]);
             }
-
-            // 更新按鈕樣式狀態 (啟用中反藍)，僅針對 tycg-btn
             const buttons = document.querySelectorAll('.tycg-btn');
             buttons.forEach((btn, index) => {
-                if (index + 1 === sourceId) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', index + 1 === sourceId);
             });
         }
 
-        /* =========================================
-           2. 氣象署 API 資料邏輯
-           ========================================= */
-        
-        // Base64 混淆 API Key
+        /* 氣象資料邏輯 */
         const _0x1a2b = 'Q1dBLTE0NjUwRUYwLTAxOUMtNERDRi1BQjUxLUE5MDM5NkY5NkY0NA==';
         const CWA_API_KEY = atob(_0x1a2b); 
 
         const AZURE_ENDPOINT = 'https://atlas.microsoft.com';
-        const AZURE_API_KEY = ''; // ⚠️ Azure Maps Subscription Key
+        const AZURE_API_KEY = ''; 
 
         const TARGETS = [
             { id: 'ntpc', name: '新北市', lat: 25.015484, lon: 121.473356 },
@@ -486,7 +652,6 @@
 
         async function fetchAzureAlerts(lat, lon) {
             if (!AZURE_API_KEY) return null; 
-
             try {
                 const url = `${AZURE_ENDPOINT}/weather/severe/alerts/json?api-version=1.1&query=${lat},${lon}&language=zh-TW&details=true&subscription-key=${AZURE_API_KEY}`;
                 const response = await fetch(url);
@@ -519,18 +684,17 @@
                 const allStations = weatherData.records.Station;
                 const allWarnings = warningData.records?.location || []; 
 
-                TARGETS.forEach(async target => {
+                await Promise.all(TARGETS.map(async target => {
                     const { station, distance } = findClosestStation(target.lat, target.lon, allStations);
                     
-                    let warningInfo = null;
-                    warningInfo = await fetchAzureAlerts(target.lat, target.lon);
+                    let warningInfo = await fetchAzureAlerts(target.lat, target.lon);
                     
                     if (!warningInfo) {
                         warningInfo = parseWarning(target.name, allWarnings);
                     }
 
                     if (station) updateWeatherUI(target.id, station, distance, warningInfo);
-                });
+                }));
 
             } catch (error) {
                 console.error("抓取氣象資料失敗:", error);
@@ -547,7 +711,6 @@
             let temp = station.WeatherElement.AirTemperature;
             let hum = station.WeatherElement.RelativeHumidity;
             
-            // 抓取測站的降雨量資料 (處理氣象署 API 可能的不同格式，通常在 Now.Precipitation)
             let rain = 0;
             if (station.WeatherElement.Now && station.WeatherElement.Now.Precipitation !== undefined) {
                 rain = station.WeatherElement.Now.Precipitation;
@@ -555,33 +718,31 @@
                 rain = station.WeatherElement.Precipitation;
             }
 
+            // 將處理後的純數值放入儀表板中 (已把單位分開處理)
             temp = (temp === -99 || temp === -999 || temp === "-99.0") ? "--" : temp;
             hum = (hum === -99 || hum === -999 || hum === "-99.0") ? "--" : hum;
-            // -99 通常代表無雨或儀器微量未計
             rain = (rain === -99 || rain === -999 || rain < 0 || rain === "-99.0") ? 0 : rain;
 
             document.getElementById(`${prefix}-station`).innerText = `(測站：${station.StationName}，距離約 ${distance.toFixed(1)} km)`;
-            document.getElementById(`${prefix}-temp`).innerText = `${temp} °C`;
-            document.getElementById(`${prefix}-hum`).innerText = `${hum} %`;
+            
+            document.getElementById(`${prefix}-temp`).innerText = temp;
+            document.getElementById(`${prefix}-hum`).innerText = hum;
             
             const rainElement = document.getElementById(`${prefix}-rain`);
-            if (rainElement) rainElement.innerText = `${rain} mm/hr`;
+            if (rainElement) rainElement.innerText = rain;
             
-            // --- 綜合判斷邏輯：結合氣象特報與「實際測站雨量」 ---
             let finalMessage = warningInfo.message;
             let finalCssClass = warningInfo.cssClass;
 
             if (warningInfo.message.includes('⚠️')) {
-                // 如果有警報，但該地點實際沒下雨
                 if (rain === 0) {
                     finalMessage = `${warningInfo.message} (目前測站無雨)`;
-                    finalCssClass = 'badge-alert'; // 降級為橘色
+                    finalCssClass = 'badge-alert'; 
                 } else {
                     finalMessage = `${warningInfo.message} (測站降雨中: ${rain}mm)`;
-                    finalCssClass = 'badge-danger'; // 紅色警戒
+                    finalCssClass = 'badge-danger'; 
                 }
             } else {
-                // 如果無警報，但該地點其實有下雨
                 if (rain > 0) {
                     finalMessage = `🌧️ 測站降雨中 (${rain}mm)`;
                     finalCssClass = 'badge-alert';
